@@ -1,0 +1,87 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body,
+html {
+  height: 100%;
+  background-color: blanchedalmond;
+  font-family: "Courier New", Courier, monospace;
+  overflow: hidden;
+}
+
+.message1 {
+  text-align: center;
+}
+
+.msg-container {
+  background-color: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* display: flex; */
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.message {
+  background: beige;
+  border-radius: 5px;
+  box-shadow: 0 15px 10px 3px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+}
+
+.message button {
+  cursor: pointer;
+  background-color: #fff;
+  color: black;
+  border: 0;
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 16px;
+}
+
+.message button:active {
+  transform: scale(0.98);
+}
+
+.message button:focus {
+  outline: 0;
+}
+
+.grid {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 5px; /* this */
+}
+
+.gameGrid {
+  background-color: black;
+  height: 600px;
+  width: 600px;
+  border-spacing: 15px;
+  border-collapse: separate;
+  box-shadow: 5px 5px gray;
+}
+
+.cell {
+  border: 1px solid gray;
+  border-radius: 50%;
+  background-color: blanchedalmond;
+}
+.reset {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 20px;
+  margin: 10px;
+  border: none;
+  background-color: black;
+  color: aliceblue;
+}
