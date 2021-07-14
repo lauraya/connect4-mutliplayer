@@ -9,4 +9,4 @@ If you want to play this game with yourself:
 
 3. Run `npm start` or `npm run dev`
 
-4. Go to http://localhost:8080/
+4. Go to http://localhost:8080/ and open two windows
