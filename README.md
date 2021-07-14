@@ -5,7 +5,7 @@ If you want to play this game with yourself:
 
 1. Clone this repository
 
-2. Run `npm install`
+2. Open command line in the repository and run `npm install`
 
 3. Run `npm start` or `npm run dev`
 
