@@ -298,7 +298,7 @@ $("#join").on("click", () => {
     alert("please enter your name and a game ID");
     return;
   }
-  socket.emit("join-game", { name: name, room: roomid });
+  socket.emit("join-game", { namep2: name, namep1: player1name, room: roomid });
 
   player = new Player(name, number2, color2);
 
@@ -309,8 +309,11 @@ socket.on("player1-name", (data) => {
   player1name = data.name;
 });
 
+socket.on;
+
 socket.on("player2-name", (data) => {
-  player2name = data.name;
+  player2name = data.namep2;
+  player1name = data.namep1;
 });
 
 socket.on("turnPlayed", (data) => {

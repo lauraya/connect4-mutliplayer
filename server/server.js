@@ -29,9 +29,9 @@ io.on("connection", (socket) => {
       socket.join(data.room);
       socket.broadcast.to(data.room).emit("player1-start");
 
-      socket.emit("player2-start", { name: data.name, room: data.room });
+      socket.emit("player2-start", { name: data.namep2, room: data.room });
       socket.broadcast.to(data.room).emit("2playerIn"); //We emit this event to player 1
-      io.emit("player2-name", { name: data.name });
+      io.emit("player2-name", { namep2: data.namep2, namep1: data.namep1 }); //We resend player1's name bc in some cases player 1's name was not registered after player 2 joins
     } else {
       console.log("room full");
       socket.emit("err", { message: "Sorry, The room is full!" });
@@ -44,20 +44,6 @@ io.on("connection", (socket) => {
       cell: data.cell,
       room: data.room,
     });
-  });
-
-  socket.on("player2-turn", (player2) => {
-    io.emit("player2-msg-turn", player2);
-  });
-  socket.on("player1-turn", (player1) => {
-    io.emit("player1-msg-turn", player1);
-  });
-  /*socket.on("win-popup", (playername) => {
-    io.emit("win-popup-msg", playername);
-  });*/
-
-  socket.on("change", (row, column, playerNumber, color) => {
-    io.emit("changeColor", row, column, playerNumber, color);
   });
 });
 
