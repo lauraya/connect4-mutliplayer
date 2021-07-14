@@ -4,12 +4,31 @@
     <meta charset="UTF-8" />
     <link href="./style.css" rel="stylesheet" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Connect 4</title>
   </head>
   <body>
-    <div class="grid">
+    <div class="container">
+			<div class="menu">
+				<h1>Connect4</h1>
+				<h3>How to play with your friend</h3>
+				<ul>
+					<li>Player 1 Create a new game by entering his/her username</li>
+					<li>Player 2 Enter another username and the room id that is displayed on first window.</li>
+					<li>Click on join game. </li>
+				</ul>
+				<h4>Create a new Game</h4>
+				<input type="text" name="name" id="Newname" placeholder="Enter your name" required>
+				<button id="new">New Game</button>
+				<br><br>
+				<h4>Join an existing game</h4>
+				<input type="text" name="name" id="nameJoin" placeholder="Enter your name" required>
+				<input type="text" name="room" id="room" placeholder="Enter Game ID" required>
+				<button id="join">Join Game</button>
+			</div>
+    <div class="grid" style="display: none">
+      <h1 id="hello" style="text-shadow: 1px 1px 2px grey;"></h1>
       <h1 class="message1"></h1>
       <div class="msg-container">
         <div class="message" id="message">
@@ -75,6 +94,7 @@
       </table>
       <button class="reset" onClick="restart();">Restart</button>
     </div>
-    <script src="index.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="main.js"></script>
   </body>
 </html>

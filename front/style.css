@@ -12,7 +12,11 @@ html {
 }
 
 .message1 {
+  background-color: black;
+  color: white;
+  padding: 0.5em;
   text-align: center;
+  box-shadow: 5px 5px 5px gray;
 }
 
 .msg-container {
@@ -56,7 +60,7 @@ html {
 
 .grid {
   height: 100%;
-  display: flex;
+  /*display: flex;*/
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -65,15 +69,15 @@ html {
 
 .gameGrid {
   background-color: black;
-  height: 600px;
-  width: 600px;
-  border-spacing: 15px;
+  height: 570px;
+  width: 650px;
+  border-spacing: 5px;
   border-collapse: separate;
-  box-shadow: 5px 5px gray;
+  box-shadow: 5px 5px 5px gray;
+  padding: 0.5em;
 }
 
 .cell {
-  border: 1px solid gray;
   border-radius: 50%;
   background-color: blanchedalmond;
 }
@@ -84,4 +88,6 @@ html {
   border: none;
   background-color: black;
   color: aliceblue;
+  padding: 0.5em;
+  box-shadow: 3px 3px 5px gray;
 }
