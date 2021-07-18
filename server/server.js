@@ -25,13 +25,13 @@ io.on("connection", (socket) => {
 
   socket.on("join-game", (data) => {
     var room = io.sockets.adapter.rooms.get(data.room); //To get room size
+    io.emit("player2-name", { namep2: data.namep2, namep1: data.namep1 });
     if (room && room.size == 1) {
       socket.join(data.room);
       socket.broadcast.to(data.room).emit("player1-start");
 
       socket.emit("player2-start", { name: data.namep2, room: data.room });
-      socket.broadcast.to(data.room).emit("2playerIn"); //We emit this event to player 1
-      io.emit("player2-name", { namep2: data.namep2, namep1: data.namep1 }); //We resend player1's name bc in some cases player 1's name was not registered after player 2 joins
+      socket.broadcast.to(data.room).emit("2playerIn");
     } else {
       console.log("room full");
       socket.emit("err", { message: "Sorry, The room is full!" });

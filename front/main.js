@@ -85,9 +85,10 @@ class Grid {
           return;
         }
 
-        for (let row = 5; row > 1; row--) {
+        for (let row = 5; row > -1; row--) {
           if (game.gameGrid[row][cell] == 0) {
             game.turnPlayed(row, cell);
+            console.log("moves", this.numberMoves);
             game.updateGrid(
               row,
               cell,
@@ -95,12 +96,10 @@ class Grid {
               player.getColor()
             );
             player.setTurn(false);
+            game.checkTie();
             game.checkWinner();
-            socket.emit("playTurn", {
-              row: row,
-              cell: cell,
-              room: this.getroomid(),
-            });
+            console.log("moves", this.numberMoves);
+
             break;
           }
         }
@@ -109,6 +108,9 @@ class Grid {
     }
   }
 
+  setNumberMoves() {
+    this.numberMoves += 1;
+  }
   setnumberOfPlayer(number) {
     this.numberOfPlayer = number;
   }
@@ -124,7 +126,9 @@ class Grid {
     console.log("cell", cell);
     var table = document.getElementById("game");
     this.gameGrid[row][cell] = number;
+    this.numberMoves++;
     table.rows[row].cells[cell].style.backgroundColor = color;
+
     audio.play();
   }
 
@@ -309,8 +313,6 @@ socket.on("player1-name", (data) => {
   player1name = data.name;
 });
 
-socket.on;
-
 socket.on("player2-name", (data) => {
   player2name = data.namep2;
   player1name = data.namep1;
@@ -321,7 +323,9 @@ socket.on("turnPlayed", (data) => {
   console.log(player);
   let opponent = player.getPlayerNumber() === 1 ? 2 : 1;
   let color = player.getColor() === color1 ? color2 : color1;
+
   game.updateGrid(data.row, data.cell, opponent, color);
+  //game.setNumberMoves();
   player.setTurn(true);
 });
 
