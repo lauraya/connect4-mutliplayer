@@ -32,6 +32,19 @@ html {
   justify-content: center;
 }
 
+.msg-leave {
+  background-color: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* display: flex; */
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
 .message {
   background: beige;
   border-radius: 5px;
@@ -40,6 +53,13 @@ html {
   text-align: center;
 }
 
+.message-leave {
+  background: beige;
+  border-radius: 5px;
+  box-shadow: 0 15px 10px 3px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+}
 .message button {
   cursor: pointer;
   background-color: #fff;
@@ -81,7 +101,7 @@ html {
   border-radius: 50%;
   background-color: blanchedalmond;
 }
-.reset-game {
+#score {
   font-family: "Courier New", Courier, monospace;
   font-size: 20px;
   margin: 10px;
@@ -90,4 +110,14 @@ html {
   color: aliceblue;
   padding: 0.5em;
   box-shadow: 3px 3px 5px gray;
+}
+
+.disable {
+  height: 100%;
+  display: none;
+  /*display: flex;*/
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 5px; /* this */
 }

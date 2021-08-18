@@ -14,9 +14,9 @@
 				<h1>Connect4</h1>
 				<h3>How to play with your friend</h3>
 				<ul>
-					<li>Player 1 Create a new game by entering his/her username</li>
-					<li>Player 2 Enter another username and the room id that is displayed on first window.</li>
-					<li>Click on join game. </li>
+					<li>-Player 1 Create a new game by entering his/her username</li>
+					<li>-Player 2 Enter another username and the room id that is displayed on first window.</li>
+					<li>-Click on join game. </li>
 				</ul>
 				<h4>Create a new Game</h4>
 				<input type="text" name="name" id="Newname" placeholder="Enter your name" required>
@@ -33,9 +33,15 @@
       <div class="msg-container">
         <div class="message" id="message">
           <h2 id="win-msg"></h2>
-          <button>Restart</button>
+          <button class="restart-popup">Restart</button>
         </div>
       </div>
+
+      <div class="msg-leave">
+        <div class="message-leave" id="message">
+          Your opponent left, page is gonna refresh soon!
+          </div>
+          </div>
       <table class="gameGrid" id="game">
         <tr class="row">
           <td class="cell"></td>
@@ -92,7 +98,7 @@
           <td class="cell"></td>
         </tr>
       </table>
-      <button class="reset-game">Restart</button>
+    <p style="text-align: center;" id="score">Score: 0</p>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="main.js"></script>

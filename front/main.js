@@ -8,7 +8,7 @@ const number2 = 2;
 const color1 = "rgb(41, 158, 179)";
 const color2 = "pink";
 
-var audio = new Audio("audio/bounce.mp3"); //boing
+var audio = new Audio("audio/bounce.mp3");
 
 class Player {
   constructor(name, number, color) {
@@ -16,11 +16,20 @@ class Player {
     this.number = number;
     this.color = color;
     this.turn = true;
+    this.score = 0;
+  }
+
+  getScore() {
+    return this.score;
+  }
+
+  addScore() {
+    this.score += 1;
   }
 
   setTurn(turn) {
-    console.log(player1name);
-    console.log(player2name);
+    //console.log(player1name);
+    //console.log(player2name);
     this.turn = turn;
     let message;
 
@@ -72,15 +81,16 @@ class Grid {
   createGrid() {
     var col = document.getElementsByTagName("tr");
     for (let cellindex = 0; cellindex < col.length; cellindex++) {
+      col[cellindex].style.cursor = "pointer";
       col[cellindex].addEventListener("click", (e) => {
-        console.log(this.numberOfPlayer);
+        // console.log(this.numberOfPlayer);
         let cell = e.target.cellIndex;
         if (!player.getTurn() || !game) {
           alert("It's not your turn!");
           return;
         }
         if (this.numberOfPlayer <= 1) {
-          //the first player cannot play as long as there is only himself TT
+          //the first player cannot play as long as there is only himself
           alert("Wait for the other player!"); //Gotta have friends
           return;
         }
@@ -88,7 +98,7 @@ class Grid {
         for (let row = 5; row > -1; row--) {
           if (game.gameGrid[row][cell] == 0) {
             game.turnPlayed(row, cell);
-            console.log("moves", this.numberMoves);
+            //console.log("moves", this.numberMoves);
             game.updateGrid(
               row,
               cell,
@@ -96,9 +106,10 @@ class Grid {
               player.getColor()
             );
             player.setTurn(false);
-            game.checkTie();
             game.checkWinner();
-            console.log("moves", this.numberMoves);
+            game.checkTie();
+
+            // console.log("moves", this.numberMoves);
 
             break;
           }
@@ -114,6 +125,12 @@ class Grid {
   setnumberOfPlayer(number) {
     this.numberOfPlayer = number;
   }
+  /**
+   * Emit event to server to tell that user played
+   *
+   * @param {int} row
+   * @param {int} cell
+   */
   turnPlayed(row, cell) {
     socket.emit("playTurn", {
       row: row,
@@ -121,9 +138,17 @@ class Grid {
       room: this.getroomid(),
     });
   }
+
+  /**
+   * Updates the board
+   * @param {int} row
+   * @param {int} cell
+   * @param {int} number number representing the player
+   * @param {*} color color representing the current player
+   */
   updateGrid(row, cell, number, color) {
-    console.log("row", row);
-    console.log("cell", cell);
+    // console.log("row", row);
+    // console.log("cell", cell);
     var table = document.getElementById("game");
     this.gameGrid[row][cell] = number;
     this.numberMoves++;
@@ -132,33 +157,63 @@ class Grid {
     audio.play();
   }
 
-  resetGrid() {}
+  resetGrid() {
+    this.gameGrid = [
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+    ];
+    this.numberMoves = 0;
+    document.querySelectorAll(".cell").forEach((slot) => {
+      slot.style.backgroundColor = "rgb(255,235,205)";
+    });
+    $(".msg-container").css("display", "none");
+  }
 
+  /**
+   *
+   * @param {String} message Winning message
+   */
   displayGrid(message) {
     $(".menu").css("display", "none");
     $(".grid").css("display", "flex");
     $("#hello").html(message);
     this.createGrid();
-    console.log("game created");
+    // console.log("game created");
   }
+
   checkWinner() {
+    $(".restart-popup").on("click", () => {
+      socket.emit("restart-game", { room: this.getroomid() });
+    });
     if (
       this.checkDiagonalRight() ||
       this.checkDiagonalLeft() ||
       this.checkHorizontal() ||
       this.checkVertical()
     ) {
-      game.winnerPopup();
-    }
-
-    if (this.checkTie()) {
+      player.addScore();
+      //  console.log("score: ", player.getScore());
+      $("#score").text("Score: " + player.getScore());
+      socket.emit("winner-here", {
+        winnerName: player.name,
+        room: this.getroomid(),
+      });
+      game.winnerPopup("You");
+    } else if (this.checkTie()) {
       game.tiePopup();
     }
   }
-
-  winnerPopup() {
+  /**
+   *
+   * @param {String} winner Name of the winner
+   */
+  winnerPopup(winner) {
     $(".msg-container").css("display", "flex");
-    $("#win-msg").text(player.name + " won!");
+    $("#win-msg").text(winner + " won!");
   }
 
   tiePopup() {
@@ -166,6 +221,7 @@ class Grid {
     $("#win-msg").text("It's a tie!");
   }
 
+  //Check if there is a winning combination
   check4(one, two, three, four) {
     return (
       one === two &&
@@ -214,6 +270,7 @@ class Grid {
       }
     }
   }
+
   checkHorizontal() {
     for (let row = 0; row < this.gameGrid.length; row++) {
       for (let i = 0; i < 4; i++) {
@@ -256,6 +313,7 @@ socket.on("newGame", (data) => {
     data.name +
     ". Please ask your friend to enter this game ID: " +
     data.room;
+  socket.emit("getRoom", { room: data.room, name: data.name });
   game = new Grid(data.room);
   game.displayGrid(msg);
 });
@@ -263,18 +321,22 @@ socket.on("newGame", (data) => {
 //When two players join game, msg of welcome
 socket.on("player1-start", (data) => {
   const message = "Hello " + player.getPlayerName();
+  player1name = data.namep1;
+  player2name = data.namep2;
   player.setTurn(true);
+
   $("#hello").html(message);
 });
 
 //Player 2 joins the game, gameGrid reavealed and msg of welcome
 socket.on("player2-start", (data) => {
-  console.log("player2 entry");
-  const message = `Hello, ${data.name}`;
+  const message = `Hello, ${data.namep2}`;
   game = new Grid(data.room);
   game.displayGrid(message);
   game.setnumberOfPlayer(2);
   socket.emit("2players", { room: data.room });
+  player1name = data.namep1;
+  player2name = data.namep2;
   player.setTurn(false);
 });
 
@@ -286,50 +348,63 @@ $("#new").on("click", () => {
   }
   socket.emit("create-game", { name: name });
   player = new Player(name, number1, color1);
-  //player1name = name;
-  //console.log("player: ", player1name);
 
-  console.log(player);
+  //console.log(player);
 });
 
 $("#join").on("click", () => {
-  console.log("player: ", player);
+  // console.log("player: ", player);
   var name = $("#nameJoin").val();
   var roomid = $("#room").val();
-  console.log(name);
-  console.log(roomid);
+  // console.log(name);
+  // console.log(roomid);
   if (!name || !roomid) {
     alert("please enter your name and a game ID");
     return;
   }
+  // console.log("joined player2", name);
+  // console.log("joined player1", player1name);
   socket.emit("join-game", { namep2: name, namep1: player1name, room: roomid });
 
   player = new Player(name, number2, color2);
 
-  console.log(player);
+  //console.log(player);
 });
 
-socket.on("player1-name", (data) => {
-  player1name = data.name;
-});
-
-socket.on("player2-name", (data) => {
-  player2name = data.namep2;
-  player1name = data.namep1;
-});
+/* ---------------------------------*/
 
 socket.on("turnPlayed", (data) => {
-  console.log(data.row);
-  console.log(player);
+  // console.log(data.row);
+  //  console.log(player);
   let opponent = player.getPlayerNumber() === 1 ? 2 : 1;
   let color = player.getColor() === color1 ? color2 : color1;
 
   game.updateGrid(data.row, data.cell, opponent, color);
-  //game.setNumberMoves();
   player.setTurn(true);
 });
 
 socket.on("2playerIn", () => {
   console.log("2 players");
-  game.setnumberOfPlayer(2); //Allow player 1 to play, if we did not do that he would be stuck
+  game.setnumberOfPlayer(2); //Set number of player to 2 to allow the playing
+});
+
+socket.on("winner-popup", (data) => {
+  //console.log("winner popup");
+  game.winnerPopup(data.winnerName);
+});
+
+socket.on("restart", () => {
+  game.resetGrid();
+});
+
+socket.on("err", () => {
+  alert("The room is full or does not exist!");
+});
+
+socket.on("opponent-left", () => {
+  //console.log("opponent left");
+  $(".msg-leave").css("display", "flex");
+  setTimeout(function () {
+    window.location.reload(1);
+  }, 3000);
 });
