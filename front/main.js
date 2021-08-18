@@ -38,7 +38,7 @@ class Player {
     } else {
       message = turn
         ? "Your turn"
-        : this.number == 1 //if the current is player is player1
+        : this.number == 1 //if the current player is player1
         ? player2name + "'s turn" //we tell player1 to wait for player 2
         : player1name + "'s turn"; //else if it's player 2  we tell player2 to wait for player1
     }
@@ -90,8 +90,8 @@ class Grid {
           return;
         }
         if (this.numberOfPlayer <= 1) {
-          //the first player cannot play as long as there is only himself
-          alert("Wait for the other player!"); //Gotta have friends
+          //the first player cannot play as long as they are alone
+          alert("Wait for the other player!");
           return;
         }
 
@@ -144,7 +144,7 @@ class Grid {
    * @param {int} row
    * @param {int} cell
    * @param {int} number number representing the player
-   * @param {*} color color representing the current player
+   * @param {String} color color representing the current player
    */
   updateGrid(row, cell, number, color) {
     // console.log("row", row);
@@ -248,6 +248,7 @@ class Grid {
       }
     }
   }
+
   checkTie() {
     if (this.numberMoves >= 42) {
       return true;
@@ -385,7 +386,7 @@ socket.on("turnPlayed", (data) => {
 
 socket.on("2playerIn", () => {
   console.log("2 players");
-  game.setnumberOfPlayer(2); //Set number of player to 2 to allow the playing
+  game.setnumberOfPlayer(2); //Set number of player to 2 to allow playing
 });
 
 socket.on("winner-popup", (data) => {
