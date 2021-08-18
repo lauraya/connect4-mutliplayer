@@ -107,7 +107,6 @@ class Grid {
             );
             player.setTurn(false);
             game.checkWinner();
-            game.checkTie();
 
             // console.log("moves", this.numberMoves);
 
@@ -204,6 +203,7 @@ class Grid {
       });
       game.winnerPopup("You");
     } else if (this.checkTie()) {
+      socket.emit("tie", { room: this.getroomid() });
       game.tiePopup();
     }
   }
@@ -394,6 +394,9 @@ socket.on("winner-popup", (data) => {
   game.winnerPopup(data.winnerName);
 });
 
+socket.on("game-tied", () => {
+  game.tiePopup();
+});
 socket.on("restart", () => {
   game.resetGrid();
 });
@@ -404,6 +407,7 @@ socket.on("err", () => {
 
 socket.on("opponent-left", () => {
   //console.log("opponent left");
+  $(".msg-container").css("display", "none"); //This line is added in case one player leaves when there is a win or tie popup
   $(".msg-leave").css("display", "flex");
   setTimeout(function () {
     window.location.reload(1);

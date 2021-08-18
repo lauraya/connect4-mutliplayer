@@ -31,7 +31,7 @@ io.on("connection", (socket) => {
     socket.emit("newGame", { name: data.name, room: "yubiyubi-" + rooms });
     users[socket.id] = data.name; //We add name of user
     io.to("yubiyubi-" + rooms).emit("player1name");
-    console.log(socket.rooms);
+    //console.log(socket.rooms);
   });
 
   socket.on("join-game", (data) => {
@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
       users[socket.id] = data.namep2; //Adding player 2's name to the array
       for (var clientID of room) {
         const clientSocket = io.sockets.sockets.get(clientID); // gets the sockets of all the users in the room
-        console.log(users[clientSocket.id]);
+        //console.log(users[clientSocket.id]);
         playername.push(users[clientSocket.id]); //gets corresponding username of the client socket and pushes to playername
       }
       socket.broadcast.to(data.room).emit("player1-start", {
@@ -68,6 +68,10 @@ io.on("connection", (socket) => {
     socket.broadcast
       .to(data.room)
       .emit("winner-popup", { winnerName: data.winnerName });
+  });
+
+  socket.on("tie", (data) => {
+    io.to(data.room).emit("game-tied");
   });
   socket.on("playTurn", (data) => {
     socket.broadcast.to(data.room).emit("turnPlayed", {
