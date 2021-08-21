@@ -1,5 +1,6 @@
 const http = require("http");
 const path = require("path");
+var PORT = process.env.PORT || 8080;
 const express = require("express");
 var users = []; //List of users
 const { Server } = require("socket.io");
@@ -86,6 +87,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(8080, () => {
+server.listen(PORT, () => {
   console.log("server started");
 });
