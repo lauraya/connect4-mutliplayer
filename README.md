@@ -1,6 +1,11 @@
 # connect4-mutliplayer
 Implementation of connect4 (puissance 4 in french) using Socket.IO and Nodejs. 
 
+# Play with someone 
+https://puissance-four.herokuapp.com/
+
+
+# Play locally
 If you want to play this game with yourself: 
 
 1. Clone this repository
